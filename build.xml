@@ -142,6 +142,23 @@
 		</jar>
 		<antcall target="clean-observatory"/>
 	</target>
+	
+	<target name="javadoc-utils">
+		<property name="classpath-core" refid="classpath-core"/>
+    <javadoc access="protected" author="true"
+    	additionalparam="-bootclasspath ${classpath-core}"
+    	destdir="doc/utils" 
+    	nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" 
+    	packagenames="net.iubris.polaris.locator.utils, net.iubris.polaris.locator.utils.exceptions"
+    	sourcepath="src/utils"
+    	source="1.6" 
+			
+    	link="${android-path}/docs/reference"
+    	splitindex="true" use="true" version="true"/>
+	</target>
+	<target name="javadoc-utils--jar" depends="javadoc-utils">
+		<jar compress="true" destfile="doc/polaris-utils-javadoc.jar" basedir="doc/utils" />
+	</target>
 		
 	<target name="jars" depends="jar-core, jar-utils, jar-observatory"/>
 

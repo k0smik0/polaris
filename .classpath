@@ -3,6 +3,7 @@
 	<classpathentry kind="src" path="src/core"/>
 	<classpathentry kind="src" path="src/utils"/>
 	<classpathentry kind="src" path="src/observatory"/>
+	<classpathentry kind="src" path="src/roboguice"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>

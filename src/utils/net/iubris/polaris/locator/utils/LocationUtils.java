@@ -25,45 +25,56 @@ import net.iubris.polaris.locator.utils.exceptions.LocationNotSoNewerException;
 import android.annotation.SuppressLint;
 import android.location.Location;
 import android.os.Build;
+import android.util.Log;
 
 /**
- * using tips from: http://developer.android.com/guide/topics/location/strategies.html
+ * using tips from: <a href="http://developer.android.com/guide/topics/location/strategies.html">http://developer.android.com/guide/topics/location/strategies.html</a>
  */
-@SuppressLint("NewApi")
+
 public class LocationUtils {
 	
 	/**
-	 * Compare locations by distance, within weighted threshold: <br/><br/>
-	 * if distance >  distanceMaximumThreshold => really farer, return true<br/>
-	 * if threshold/3 < distance < threshold =>  not so farer, throw exception<br/>
-	 * if 0 < distance < threshold/3 => almost near, return false <br/><br/>
+	 * Compares locations by distance, within weighted threshold.
 	 * 
-	 * we use "threshold/3" as value for weighted threshold: <br/>
+	 * <p>
+	 * <ul>
+	 * 	<li>if distance >  distanceMaximumThreshold => really farer, return true</li>
+	 * 	<li>if threshold/3 < distance < threshold =>  not so farer, throw exception</li>
+	 * 	<li>if 0 < distance < threshold/3 => almost near, return false</li>
+	 * </ul>
+	 * 
+	 * we use "threshold/3" as value for weighted threshold:
 	 * <pre>
+	 * <code>
 	 * | -- false -- | 	-- throw exception --   | true <br/>
-	 * 0	     TS/3	    ts*2/3 		TS
+	 * 0            TS/3          ts*2/3              TS
+	 * </code>
 	 * </pre>
+	 * 
 	 * @param newLocation
 	 * @param currentLocation
 	 * @param distanceMaximumThreshold
-	 * @return
-	 * @throws LocationNotSoFarException 
+	 * @return true if newLocation is significantly far than currentLocation, false elsewhere
+	 * @throws LocationNotSoFarException if newLocation is not so far than currentLocation, that is within distanceMaximumThreshold
 	 */
 	public static boolean isLocationFar(Location newLocation, Location currentLocation, float distanceMaximumThreshold) throws LocationNotSoFarException {
 		float deltaDistance = newLocation.distanceTo(currentLocation);
+Log.d("LocationUtils:62,","newLocation: "+newLocation);
+Log.d("LocationUtils:63,","currentLocation: "+currentLocation);
+Log.d("LocationUtils:64","deltaDistance = "+deltaDistance);		
 		float sensibleThreshold = distanceMaximumThreshold/3;
 		if (deltaDistance > distanceMaximumThreshold) return true; // distance >  threshold
 		if (deltaDistance < sensibleThreshold) return false; // 0 < distance < threshold/3
-		throw new LocationNotSoFarException(""); // distance > threshold/3 
+		throw new LocationNotSoFarException("newLocation ["+newLocation+"] is not so far from ["+currentLocation+"]: just "+deltaDistance+" m"); // distance > threshold/3 
 	}
 	
 	/**
+	 * 	Compare currentLocation with newLocation by time
 	 * @param currentLocation
-	 * Compare currentLocation with newLocation by time
 	 * @param newLocation
 	 * @param timeMinimumThreshold - in milliseconds
-	 * @return true if currentLocation is older than newLocation, according to timeMinimumThreshold - false otherwise 
-	 * @throws LocationNotSoNewerException  
+	 * @return true if newLocation is newer than currentLocation, according to timeMinimumThreshold - false otherwise 
+	 * @throws LocationNotSoNewerException when newLocation is newer than currentLocation, but retrieved within threshold defined by timeMinimumThreshold parameter
 	 */	
 //	@SuppressLint("NewApi")
 	public static boolean isLocationNewer(Location newLocation, Location currentLocation, float timeMinimumThreshold ) throws LocationNotSoNewerException {		 
@@ -93,11 +104,11 @@ Log.d("LocationUtils.isLocationOlder","difference: "+ (System.currentTimeMillis(
 	
 	/**
 	 * Compare currentLocation with newLocation by accuracy (distance error)
-	 * @param actualLocation
+	 * @param newLocation
 	 * @param currentLocation
-	 * @param distanceMinimumThreshold - in meters
-	 * @return true is newLocation is nearer than currentLocation, false otherwise - "near" means "higher accuracy"
-	 * @throws LocationNotSoCarefulException 
+	 * @param accuracyDistanceMaximumThreshold - in meters
+	 * @return true is newLocation has higher accuracy than currentLocation, false otherwise
+	 * @throws LocationNotSoCarefulException if newLocation is retrieved in same admitted area, according to accuracyDistanceMaximumThreshold parameter
 	 */
 	public static boolean isLocationCareful(Location newLocation, Location currentLocation, float accuracyDistanceMaximumThreshold) throws LocationNotSoCarefulException{
 		
@@ -109,18 +120,20 @@ Log.d("LocationUtils.isLocationOlder","difference: "+ (System.currentTimeMillis(
 		
 		if (accuracyDelta < 0.0) 	// ok, delta < 0, so is careful: isMoreAccurate
 			return true;
-		if (accuracyDelta > accuracyDistanceMaximumThreshold) { // significantly farer: isSignificantlyLessAccurate !
+		if (accuracyDelta > accuracyDistanceMaximumThreshold) { // significantly lower accuracy: isSignificantlyLessAccurate !
 			return false;
 		}
-		// accuracyDelta > 0.0 // newLocation is farer: isLessAccurate
+		// accuracyDelta > 0.0 // newLocation has higher accuracy, but within threshold: isLessAccurate
 		// delta is low, and under threshold <=> 0 < accuracyDelta < accuracyDistanceMaximumThreshold
-		throw new LocationNotSoCarefulException("newLocation is nearer (careful) than currentLocation, but both are retrieved in admitted area, according to declared accuracyDistanceMaximumThreshold="+accuracyDistanceMaximumThreshold +"m");
+		throw new LocationNotSoCarefulException("newLocation has higher accuracy than currentLocation, but both are retrieved in admitted area, according to declared accuracyDistanceMaximumThreshold="+accuracyDistanceMaximumThreshold +"m");
 	}
 	
 	
-	/** Determines whether one Location reading is better than the current Location fix
+	/** Determines whether one Location reading is better than the current Location fix (better = combination of "newer" and "higher accuracy" and etc)
 	  * @param newLocation  The new Location that you want to evaluate
 	  * @param currentLocation  The current Location fix, to which you want to compare the new one
+	  * @param timeMinimumThreshold threshold for evaluating if newLocation is newer (and how) than currentLocation  
+	  * @param accuracyDistanceMaximumThreshold threshold for evaluating if newLocation has more accuracy (and how) than currentLocation
 	  * @see <a href="http://developer.android.com/guide/topics/location/strategies.html">tips used for implementation strategy</a>
 	  */
 	public static boolean isLocationBetter(Location newLocation, Location currentLocation, long timeMinimumThreshold, int accuracyDistanceMaximumThreshold) {
@@ -137,25 +150,20 @@ Log.d("LocationUtils.isLocationOlder","difference: "+ (System.currentTimeMillis(
 	    boolean isNewer = timeDelta > 0;
 	    */
 	    
-	    boolean isSignificantlyNewer = false; 
+//	    boolean isSignificantlyNewer = false; 
 //	    boolean isNewer = false;
 	    
     	try {
-    		isSignificantlyNewer = isLocationNewer(newLocation, currentLocation, timeMinimumThreshold);
-    	    // If it's been more than "timeMinimumThreshold" (2?) minutes since the current location, use the new location
-    	    // because the user has likely moved
-    		if (isSignificantlyNewer) {
-    	        return true;
-    		} 
-    		// 	isSignificantlyOlder = !isSignificantlyNewer;
-    		// If the new location is more than "timeMinimumThreshold" minutes older, it must be worse
-    	    return false;    	    
-		} catch (LocationNotSoNewerException e) {
+    		
+    	    // return true If it's been more than "timeMinimumThreshold" (2?) minutes since the current location, 
+    		// so use the new location because the user has likely moved
+    		// else return false - really "false" means newLocation time is older than currentLocation ones => it must be worse, so return false 
+    		//
+    		return isLocationNewer(newLocation, currentLocation, timeMinimumThreshold);
+    		    	    
+		} catch (LocationNotSoNewerException e) { // we arrive if true nor false are returned, however the catch do nothing and go straitght
 //			isNewer = true;
 		}
-	    
-	    
-
 	    
 
 	    /* old way, by tips
@@ -170,43 +178,45 @@ Log.d("LocationUtils.isLocationOlder","difference: "+ (System.currentTimeMillis(
 	    boolean isMoreAccurate = accuracyDelta < 0;
 	    */
     	
-    	// if we are here, isNewer is true
+    	// if we are here, newLocation is newer than currentLocation, but retrieved within threshold, so we check for any accuracy
 	    boolean isLessAccurate = false;
 //	    boolean isSignificantlyLessAccurate = false;
-	    boolean isMoreAccurate = false;
+//	    boolean isMoreAccurate = false;
 	    
 	    // Determine location quality using a combination of timeliness and accuracy
-	    
 	    try {
-	    	isMoreAccurate = isLocationCareful(newLocation, currentLocation, accuracyDistanceMaximumThreshold);
-	    	if (isMoreAccurate) {
+//	    	isMoreAccurate = 
+			if (isLocationCareful(newLocation, currentLocation, accuracyDistanceMaximumThreshold));
+//	    	if (isMoreAccurate) {
 		        return true;
-	    	}
+//	    	}
 	    	// if we are here, isLessAccurate is false;
 //	    	isSignificantlyLessAccurate = true; // = !isMoreAccurate
 		} catch (LocationNotSoCarefulException e) {
-			// if we are here, isSignificantlyLessAccurate is false, that is 0 < accuracyDelta < accuracyThreshold
+			// if we are here, we have higher accuracy, but under threshold that is 0 < accuracyDelta < accuracyThreshold
+			// we try check by providers
 			
-			boolean isFromSameProvider = isSameProvider(newLocation.getProvider(), currentLocation.getProvider());
+//			boolean isFromSameProvider = 
+			if (isSameProvider(newLocation.getProvider(), currentLocation.getProvider()))
 			// isSignificantlyLessAccurate is false
-		    if (isFromSameProvider) { // really is: (isNewer && !isSignificantlyLessAccurate && isFromSameProvider)
+//		    if (isFromSameProvider) { // really is: (isNewer && !isSignificantlyLessAccurate && isFromSameProvider)
 		        return true;
-		    }
+//		    }
 			
 			isLessAccurate = true;
 		}
 	    
-	    // isMoreAccurate is false (not returned) AND isLessAccurate is false (not throwed exception)
-	    if (!isLessAccurate) { // really is (isNewer && !isLessAccurate) 
+	    // isMoreAccurate (= isLocationCareful=true) is still false (but not returned) AND isLessAccurate is still false (not throwed LocationNotSoCarefulException)
+	    if (!isLessAccurate) { // really is (isNewer=[catched LocationNotSoNewer from isLocationNewer] && !isLessAccurate) 
 	    	return true;
 	    }
 	    
 	    return false;
 	}
 	
-	public static boolean is() {
+	/*public static boolean is() {
 		return false;	
-	}
+	}*/
 	
 //	public static boolean is
 	/*
@@ -231,7 +241,7 @@ Log.d("LocationUtils.isLocationOlder","difference: "+ (System.currentTimeMillis(
 	
 	@SuppressLint("NewApi")
 	private static long getTimeDelta(Location a, Location b) {
-		if ( Build.VERSION.SDK_INT > 16 )
+		if ( Build.VERSION.SDK_INT >= 17 )
 			return Math.abs( a.getElapsedRealtimeNanos() - b.getElapsedRealtimeNanos() );
 		return Math.abs( a.getTime() - b.getTime() );
 	}

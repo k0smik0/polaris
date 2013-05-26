@@ -22,5 +22,16 @@ package net.iubris.polaris.locator.provider;
 import android.location.Location;
 
 public interface LocationProvider {
+	/**
+	 * @return provided location
+	 */
 	Location getLocation();
+	/**
+	 * @return time threshold used to check new locations - in milliseconds
+	 */
+	Integer getMinimumTimeThreshold();
+	/**
+	 * @return distance threshold used to check new locations - in meters
+	 */
+	Integer getMinimumDistanceThreshold();
 }
