@@ -23,6 +23,10 @@ import android.location.Location;
 
 public interface LocationProvider {
 	/**
+	 * 
+	 */
+//	void notifyNewLocation();
+	/**
 	 * @return provided location
 	 */
 	Location getLocation();

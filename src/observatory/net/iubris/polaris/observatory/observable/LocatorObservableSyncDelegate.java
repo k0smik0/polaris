@@ -23,4 +23,4 @@ import net.iubris.epicurus.observer.observable.SyncObservableDelegate;
 import net.iubris.polaris.observatory.action.LocationNotificationAction;
 import net.iubris.polaris.observatory.observer.LocationObserver;
 
-public class LocatorObservableSyncObservableDelegate extends SyncObservableDelegate<LocationObserver,LocationNotificationAction> {}
+public class LocatorObservableSyncDelegate extends SyncObservableDelegate<LocationObserver,LocationNotificationAction> {}
