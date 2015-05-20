@@ -11,8 +11,16 @@
 	<property name="docurl" value="https://github.com/k0smik0/polaris"/>
 	
 	
-	<property name="android-path" value="/data/fucina/develop/usr/apps/android-sdk/" />
-	<property name="android-sdk-target-version" value="17"/>
+	<property environment="env" />
+	<condition property="sdk.dir" value="${env.ANDROID_HOME}">
+	  <isset property="env.ANDROID_HOME" />
+	</condition>
+	<property name="android-path" value="${sdk.dir}" />
+	
+	<!-- change here with actual -->
+	<property name="android-sdk-target-version" value="22"/>
+	
+	
 		
 	<property name="main-libs-dir" value="libs"/>
 			
@@ -24,6 +32,8 @@
 	<property name="jar-core.file" value="${build.dir}/jars/polaris-core.jar" />
 	<property name="jar-utils.file" value="${build.dir}/jars/polaris-utils.jar" />
 	<property name="jar-observatory.file" value="${build.dir}/jars/polaris-observatory.jar" />
+	<property name="jar-roboguiced.file" value="${build.dir}/jars/polaris-core-roboguiced.jar" />
+	
 	
 	
 	
@@ -52,6 +62,13 @@
 		</fileset>
 	</path>
 	
+	<path id="classpath-roboguiced">
+		<path refid="classpath-core"/>
+		<fileset dir="${build.dir}/jars">
+			<include name="*core.jar"/>
+		</fileset>
+	</path>
+	
 	<target name="clean-core">
 		<delete dir="${build.dir}/classes/core"/>
 	</target>
@@ -62,9 +79,22 @@
 	<target name="clean-observatory">
 		<delete dir="${build.dir}/classes/observatory"/>
 	</target>
+	
+	<target name="clean-roboguiced">
+		<delete dir="${build.dir}/classes/roboguiced"/>
+	</target>
 	  
 	<target name="clean" depends="clean-core, clean-utils, clean-observatory"/>	
-			
+
+	<target name="get-real-dependencies">
+    <get dest="${libs-dir}">
+      <url url="https://github.com/k0smik0/epicurus/blob/master/library/common/build/jars/epicurus.jar?raw=true"/>
+    </get>
+    <get dest="${libs-dir}">
+      <url url="http://central.maven.org/maven2/org/sonatype/sisu/sisu-guice/3.2.0/sisu-guice-3.2.0.jar"/>
+    </get>
+  </target>
+				
 	<target name="compile-core">
 		<mkdir dir="${build.dir}/classes/core"/>
 		<javac destdir="${build.dir}/classes/core" includeantruntime="false">
@@ -89,6 +119,15 @@
 			<src path="${src.dir}/observatory" />
 			<include name="**/*.java"/>
 			<classpath refid="classpath-observatory"/>
+		</javac>
+	</target>
+	
+	<target name="compile-roboguiced">
+		<mkdir dir="${build.dir}/classes/roboguiced"/>
+		<javac destdir="${build.dir}/classes/roboguiced" includeantruntime="false">
+			<src path="${src.dir}/roboguiced" />
+			<include name="**/*.java"/>
+			<classpath refid="classpath-roboguiced"/>
 		</javac>
 	</target>
 		
@@ -143,6 +182,23 @@
 		<antcall target="clean-observatory"/>
 	</target>
 	
+	<target name="jar-roboguiced" depends="clean-roboguiced, compile-roboguiced">
+		<mkdir dir="${build.dir}/jars/"/>
+		<jar destfile="${jar-roboguiced.file}" basedir="${build.dir}/classes/roboguiced">
+			<manifest>
+				<attribute name="Built-By" value="${user}" />    
+        <attribute name="Bundle-Name" value="${name}" />
+      	<attribute name="Bundle-Copyright" value="${copyright}" />
+      	<attribute name="Bundle-Vendor" value="${vendor}" />
+        <attribute name="Bundle-Version" value="${version}" />
+        <attribute name="Bundle-License" value="${license.url} " />
+        <attribute name="Build-DocURL" value="${docurl}" />	      
+			</manifest>			
+			<metainf dir="." includes="${license.file}"/>
+		</jar>
+		<antcall target="clean-roboguiced"/>
+	</target>
+	
 	<target name="javadoc-utils">
 		<property name="classpath-core" refid="classpath-core"/>
     <javadoc access="protected" author="true"
@@ -160,6 +216,8 @@
 		<jar compress="true" destfile="doc/polaris-utils-javadoc.jar" basedir="doc/utils" />
 	</target>
 		
-	<target name="jars" depends="jar-core, jar-utils, jar-observatory"/>
+	<target name="jars" depends="jar-core, jar-utils, jar-observatory, jar-roboguiced">
+		<delete dir="${build.dir}/classes"/>
+	</target>
 
 </project>
