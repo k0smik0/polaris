@@ -17,7 +17,7 @@
  * along with 'Polaris'; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  ******************************************************************************/
-package net.iubris.polaris.locator.utils.exceptions;
+package net.iubris.polaris.locator.exceptions;
 
 public class LocationException extends Exception {
 

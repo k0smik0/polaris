@@ -23,4 +23,7 @@ import net.iubris.polaris.locator.provider.LocationProvider;
 import net.iubris.polaris.locator.updater.LocationUpdater;
 
 
-public interface Locator extends LocationProvider,LocationUpdater {}
+public interface Locator extends LocationProvider, LocationUpdater {
+	final static String ACTION_LOCATION_UPDATED_SUFFIX = ".action.ACTION_LOCATION_UPDATED";
+	final static String EXTRA_KEY_LOCATION_UPDATED = "net.iubris.polaris.extra.LOCATION_UPDATED";
+}

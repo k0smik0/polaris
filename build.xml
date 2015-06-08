@@ -55,6 +55,13 @@
 		</fileset>
 	</path>
 	
+	<path id="classpath-utils">
+		<path refid="classpath-core"/>		
+		<fileset dir="${build.dir}/jars">
+			<include name="*core.jar"/>
+		</fileset>
+	</path>
+	
 	<path id="classpath-observatory">
 		<path refid="classpath-core"/>
 		<fileset dir="${build.dir}/jars">
@@ -109,7 +116,7 @@
 		<javac destdir="${build.dir}/classes/utils" includeantruntime="false">
 			<src path="${src.dir}/utils" />
 			<include name="**/*.java"/>
-			<classpath refid="classpath-core"/>
+			<classpath refid="classpath-utils"/>
 		</javac>
 	</target>
 	

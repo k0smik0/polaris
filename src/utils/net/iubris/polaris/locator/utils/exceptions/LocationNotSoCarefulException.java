@@ -19,6 +19,8 @@
  ******************************************************************************/
 package net.iubris.polaris.locator.utils.exceptions;
 
+import net.iubris.polaris.locator.exceptions.LocationException;
+
 public class LocationNotSoCarefulException extends LocationException {
 
 	public LocationNotSoCarefulException(String string) {
