@@ -17,7 +17,7 @@
  * along with 'Polaris'; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  ******************************************************************************/
-package net.iubris.polaris._roboguice.module;
+package net.iubris.polaris._di._roboguice.module;
 
 import com.google.inject.AbstractModule;
 
@@ -31,5 +31,4 @@ public abstract class PolarisModule extends AbstractModule {
 	
 	protected abstract void bindLocationProvider();
 	protected abstract void bindLocationUpdater();
-
 }
