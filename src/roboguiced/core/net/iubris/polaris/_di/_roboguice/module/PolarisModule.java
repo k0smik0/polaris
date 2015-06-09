@@ -21,6 +21,7 @@ package net.iubris.polaris._di._roboguice.module;
 
 import com.google.inject.AbstractModule;
 
+
 public abstract class PolarisModule extends AbstractModule {
 	
 	@Override

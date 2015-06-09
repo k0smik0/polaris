@@ -1,5 +1,8 @@
 package net.iubris.polaris._di.tasks.resume.freshlocation.providers;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
+
 import net.iubris.polaris._di.tasks.resume.freshlocation.annotations.LocationNullAllWrongString;
 import net.iubris.polaris._di.tasks.resume.freshlocation.annotations.LocationNullEnableGPSString;
 import net.iubris.polaris.locator.provider.LocationProvider;
@@ -8,9 +11,6 @@ import roboguice.inject.ContextSingleton;
 import android.app.Activity;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
-
-import com.google.inject.Inject;
-import com.google.inject.Provider;
 
 @ContextSingleton
 public class GetFreshLocationTaskProvider implements Provider<GetFreshLocationTask> {
