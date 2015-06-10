@@ -1,1 +1,3 @@
 libs/*jar
+bin/**/*
+gen/**/*
