@@ -33,7 +33,7 @@
 	<property name="jar-task.file" value="${build.dir}/jars/polaris-task.jar" />
 	<property name="jar-core-roboguiced.file" value="${build.dir}/jars/polaris-core-roboguiced.jar" />
 	<property name="jar-task-roboguiced.file" value="${build.dir}/jars/polaris-task-roboguiced.jar" />
-	<property name="jar-utils.file" value="${build.dir}/jars/polaris-utils.jar" />
+	<!--<property name="jar-utils.file" value="${build.dir}/jars/polaris-utils.jar" />-->
 	<property name="jar-observatory.file" value="${build.dir}/jars/polaris-observatory.jar" />
 	
 	
@@ -55,13 +55,13 @@
 		</fileset>
 	</path>
 	
-	<path id="classpath-utils">
+	<!--<path id="classpath-utils">
 		<path refid="classpath-core"/>		
 		<fileset dir="${build.dir}/jars">
 			<include name="*core.jar"/>
 		</fileset>
-	</path>
-   
+	</path>-->
+
    <path id="classpath-task">
       <path refid="classpath-core"/>
 		<fileset dir="${build.dir}/jars">
@@ -98,9 +98,9 @@
 	<target name="clean-core">
 		<delete dir="${build.dir}/classes/core"/>
 	</target>
-	<target name="clean-utils">
+	<!--<target name="clean-utils">
 		<delete dir="${build.dir}/classes/utils"/>
-	</target>
+	</target>-->
 	
 	<target name="clean-task">
 		<delete dir="${build.dir}/classes/task"/>
@@ -116,8 +116,9 @@
 	<target name="clean-task-roboguiced">
 		<delete dir="${build.dir}/classes/roboguiced/task"/>
 	</target>
-	  
-   <target name="clean" depends="clean-core, clean-utils, clean-task, clean-observatory, clean-core-roboguiced, clean-task-roboguiced"/>
+
+	<!--clean-utils,-->
+   <target name="clean" depends="clean-core, clean-task, clean-observatory, clean-core-roboguiced, clean-task-roboguiced"/>
    <target name="clean-jars">
 		<delete dir="${build.dir}/jars"/>
    </target>
@@ -131,27 +132,27 @@
     </get>
   </target>
 				
-	<target name="compile-core">
+  <target name="compile-core">
 		<mkdir dir="${build.dir}/classes/core"/>
-		<javac destdir="${build.dir}/classes/core" includeantruntime="false">
+		<javac destdir="${build.dir}/classes/core" includeantruntime="false" target="1.6" source="1.6"  bootclasspath="${env.JAVA_HOME}/jre/lib/rt.jar">
 			<src path="${src.dir}/core" />
 			<include name="**/*.java"/>
 			<classpath refid="classpath-core"/>
 		</javac>
 	</target>
-	
-	<target name="compile-utils">
+
+	<!--<target name="compile-utils">
 		<mkdir dir="${build.dir}/classes/utils"/>
-		<javac destdir="${build.dir}/classes/utils" includeantruntime="false">
+		<javac destdir="${build.dir}/classes/utils" includeantruntime="false" target="1.6" source="1.6"  bootclasspath="${env.JAVA_HOME}/jre/lib/rt.jar">
 			<src path="${src.dir}/utils" />
 			<include name="**/*.java"/>
 			<classpath refid="classpath-utils"/>
 		</javac>
-	</target>
-   
+	</target>-->
+
    <target name="compile-task" depends="jar-core">
 		<mkdir dir="${build.dir}/classes/task"/>
-		<javac destdir="${build.dir}/classes/task" includeantruntime="false">
+		<javac destdir="${build.dir}/classes/task" includeantruntime="false" target="1.6" source="1.6"  bootclasspath="${env.JAVA_HOME}/jre/lib/rt.jar">
 			<src path="${src.dir}/task" />
 			<include name="**/*.java"/>
 			<classpath refid="classpath-task"/>
@@ -160,7 +161,7 @@
 
 	<target name="compile-observatory">
 		<mkdir dir="${build.dir}/classes/observatory"/>
-		<javac destdir="${build.dir}/classes/observatory" includeantruntime="false">
+		<javac destdir="${build.dir}/classes/observatory" includeantruntime="false"  bootclasspath="${env.JAVA_HOME}/jre/lib/rt.jar">
 			<src path="${src.dir}/observatory" />
 			<include name="**/*.java"/>
 			<classpath refid="classpath-observatory"/>
@@ -169,7 +170,7 @@
 	
 	<target name="compile-core-roboguiced" depends="jar-core">
 		<mkdir dir="${build.dir}/classes/roboguiced/core"/>
-		<javac destdir="${build.dir}/classes/roboguiced/core" includeantruntime="false">
+		<javac destdir="${build.dir}/classes/roboguiced/core" includeantruntime="false" source="1.6"  bootclasspath="${env.JAVA_HOME}/jre/lib/rt.jar">
 			<src path="${src.dir}/roboguiced/core" />
 			<include name="**/*.java"/>
 			<classpath refid="classpath-core-roboguiced"/>
@@ -178,13 +179,13 @@
 	
 	<target name="compile-task-roboguiced" depends="compile-task">
 		<mkdir dir="${build.dir}/classes/roboguiced/task"/>
-		<javac destdir="${build.dir}/classes/roboguiced/task" includeantruntime="false">
+		<javac destdir="${build.dir}/classes/roboguiced/task" includeantruntime="false" target="1.6" source="1.6" bootclasspath="${env.JAVA_HOME}/jre/lib/rt.jar">
 			<src path="${src.dir}/roboguiced/task" />
 			<include name="**/*.java"/>
 			<classpath refid="classpath-task-roboguiced"/>
 		</javac>
 	</target>
-		
+
 	<target name="jar-core" depends="clean-core, compile-core">
 		<mkdir dir="${build.dir}/jars/"/>
 		<jar destfile="${jar-core.file}" basedir="${build.dir}/classes/core">
@@ -201,8 +202,8 @@
 		</jar>
 		<antcall target="clean-core"/>
 	</target>
-	
-	<target name="jar-utils" depends="clean-utils, compile-utils">
+
+	<!--<target name="jar-utils" depends="clean-utils, compile-utils">
 		<mkdir dir="${build.dir}/jars/"/>
 		<jar destfile="${jar-utils.file}" basedir="${build.dir}/classes/utils">
 			<manifest>
@@ -217,8 +218,8 @@
 			<metainf dir="." includes="${license.file}"/>
 		</jar>
 		<antcall target="clean-utils"/>
-	</target>
-   
+	</target>-->
+
    <target name="jar-task" depends="clean-task, compile-task">
 		<mkdir dir="${build.dir}/jars/"/>
 		<jar destfile="${jar-task.file}" basedir="${build.dir}/classes/task">
@@ -287,7 +288,7 @@
 		<antcall target="clean-task-roboguiced"/>
 	</target>
 	
-	<target name="javadoc-utils">
+	<!--<target name="javadoc-utils">
       <property name="classpath-core" refid="classpath-core"/>
       <javadoc access="protected" author="true"
     	   additionalparam="-bootclasspath ${classpath-core}"
@@ -298,12 +299,13 @@
        	source="1.6" 			
        	link="${android-path}/docs/reference"
        	splitindex="true" use="true" version="true"/>
-	</target>
-	<target name="javadoc-utils--jar" depends="javadoc-utils">
+	</target>-->
+	<!--<target name="javadoc-utils-jar" depends="javadoc-utils">
 		<jar compress="true" destfile="doc/polaris-utils-javadoc.jar" basedir="doc/utils" />
-	</target>
-		
-	<target name="jars" depends="jar-core, jar-utils, jar-task, jar-observatory, jar-core-roboguiced, jar-task-roboguiced">
+	</target>-->
+
+	<!--jar-utils,-->
+	<target name="jars" depends="jar-core, jar-task, jar-observatory, jar-core-roboguiced, jar-task-roboguiced">
 		<delete dir="${build.dir}/classes"/>
 	</target>
 

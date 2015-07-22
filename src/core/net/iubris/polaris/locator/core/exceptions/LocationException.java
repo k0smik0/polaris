@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyleft 2013 Massimiliano Leone - massimiliano.leone@iubris.net .
  * 
- * Locator.java is part of 'Polaris'.
+ * LocationException.java is part of 'Polaris'.
  * 
  * 'Polaris' is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,13 +17,19 @@
  * along with 'Polaris'; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  ******************************************************************************/
-package net.iubris.polaris.locator;
+package net.iubris.polaris.locator.core.exceptions;
 
-import net.iubris.polaris.locator.provider.LocationProvider;
-import net.iubris.polaris.locator.updater.LocationUpdater;
+public class LocationException extends Exception {
 
+	private static final long serialVersionUID = -3643620849629479936L;
 
-public interface Locator extends LocationProvider, LocationUpdater {
-	final static String ACTION_LOCATION_UPDATED_SUFFIX = ".action.ACTION_LOCATION_UPDATED";
-	final static String EXTRA_KEY_LOCATION_UPDATED = "net.iubris.polaris.extra.LOCATION_UPDATED";
+	public LocationException(String detailMessage, Throwable throwable) {
+		super(detailMessage, throwable);
+	}
+	public LocationException(String detailMessage) {
+		super(detailMessage);
+	}
+	public LocationException(Throwable throwable) {
+		super(throwable);
+	}
 }

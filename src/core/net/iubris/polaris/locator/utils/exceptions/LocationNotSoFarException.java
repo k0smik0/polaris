@@ -19,7 +19,7 @@
  ******************************************************************************/
 package net.iubris.polaris.locator.utils.exceptions;
 
-import net.iubris.polaris.locator.exceptions.LocationException;
+import net.iubris.polaris.locator.core.exceptions.LocationException;
 
 public class LocationNotSoFarException extends LocationException {
 

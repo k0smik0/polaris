@@ -5,7 +5,7 @@ import javax.inject.Provider;
 
 import net.iubris.polaris._di.tasks.resume.freshlocation.annotations.LocationNullAllWrongString;
 import net.iubris.polaris._di.tasks.resume.freshlocation.annotations.LocationNullEnableGPSString;
-import net.iubris.polaris.locator.provider.LocationProvider;
+import net.iubris.polaris.locator.core.provider.LocationProvider;
 import net.iubris.polaris.tasks.resume.freshlocation.GetFreshLocationTask;
 import roboguice.inject.ContextSingleton;
 import android.app.Activity;

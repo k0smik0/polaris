@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyleft 2013 Massimiliano Leone - massimiliano.leone@iubris.net .
  * 
- * LocationNotSoNewerException.java is part of 'Polaris'.
+ * LocationUpdater.java is part of 'Polaris'.
  * 
  * 'Polaris' is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,20 +17,9 @@
  * along with 'Polaris'; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  ******************************************************************************/
-package net.iubris.polaris.locator.utils.exceptions;
+package net.iubris.polaris.locator.core.updater;
 
-import net.iubris.polaris.locator.exceptions.LocationException;
-
-public class LocationNotSoNewerException extends LocationException {
-
-	public LocationNotSoNewerException(String string) {
-		super(string);
-	}
-	public LocationNotSoNewerException(String detailMessage, Throwable throwable) {
-		super(detailMessage, throwable);
-	}
-	public LocationNotSoNewerException(Throwable throwable) {
-		super(throwable);
-	}
-	private static final long serialVersionUID = -6216901852101200245L;
+public interface LocationUpdater {
+	void startLocationUpdates();
+	void stopLocationUpdates();
 }

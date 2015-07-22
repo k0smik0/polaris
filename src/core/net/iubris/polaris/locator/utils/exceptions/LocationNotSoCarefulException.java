@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyleft 2013 Massimiliano Leone - massimiliano.leone@iubris.net .
  * 
- * LocationUpdater.java is part of 'Polaris'.
+ * LocationNotSoCarefulException.java is part of 'Polaris'.
  * 
  * 'Polaris' is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,9 +17,21 @@
  * along with 'Polaris'; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  ******************************************************************************/
-package net.iubris.polaris.locator.updater;
+package net.iubris.polaris.locator.utils.exceptions;
 
-public interface LocationUpdater {
-	void startLocationUpdates();
-	void stopLocationUpdates();
+import net.iubris.polaris.locator.core.exceptions.LocationException;
+
+public class LocationNotSoCarefulException extends LocationException {
+
+	public LocationNotSoCarefulException(String string) {
+		super(string);
+	}
+	public LocationNotSoCarefulException(String detailMessage,
+			Throwable throwable) {
+		super(detailMessage, throwable);
+	}
+	public LocationNotSoCarefulException(Throwable throwable) {
+		super(throwable);
+	}
+	private static final long serialVersionUID = 4657190508508306617L;
 }

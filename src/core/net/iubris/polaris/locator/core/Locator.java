@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyleft 2013 Massimiliano Leone - massimiliano.leone@iubris.net .
  * 
- * PolarisModule.java is part of 'Polaris'.
+ * Locator.java is part of 'Polaris'.
  * 
  * 'Polaris' is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -17,19 +17,13 @@
  * along with 'Polaris'; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  ******************************************************************************/
-package net.iubris.polaris._di._roboguice.module;
+package net.iubris.polaris.locator.core;
 
-import com.google.inject.AbstractModule;
+import net.iubris.polaris.locator.core.provider.LocationProvider;
+import net.iubris.polaris.locator.core.updater.LocationUpdater;
 
 
-public abstract class PolarisModule extends AbstractModule {
-	
-	@Override
-	protected final void configure() {
-		bindLocationProvider();
-		bindLocationUpdater();
-	}
-	
-	protected abstract void bindLocationProvider();
-	protected abstract void bindLocationUpdater();
+public interface Locator extends LocationProvider, LocationUpdater {
+	final static String ACTION_LOCATION_UPDATED_SUFFIX = ".action.ACTION_LOCATION_UPDATED";
+	final static String EXTRA_KEY_LOCATION_UPDATED = "net.iubris.polaris.extra.LOCATION_UPDATED";
 }

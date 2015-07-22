@@ -3,13 +3,14 @@ package net.iubris.polaris.tasks.resume.freshlocation;
 
 
 import net.iubris.etask.EnhancedSafeAsyncTaskContexted;
-import net.iubris.polaris.locator.LocatorUtils;
-import net.iubris.polaris.locator.exceptions.LocationException;
-import net.iubris.polaris.locator.provider.LocationProvider;
+import net.iubris.polaris.locator.core.LocatorUtils;
+import net.iubris.polaris.locator.core.exceptions.LocationException;
+import net.iubris.polaris.locator.core.provider.LocationProvider;
 import net.iubris.polaris.tasks.resume.freshlocation.exceptions.NoNetworkException;
 import net.iubris.polaris.tasks.resume.freshlocation.utils.NetworkUtils;
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.widget.Toast;
@@ -24,15 +25,16 @@ public class GetFreshLocationTask extends EnhancedSafeAsyncTaskContexted<Boolean
 	
 	private final LocationManager locationManager;
 	private final LocationProvider locationProvider;
-	
 	private final String locationNullEnableGPS;
-	
 	private final String locationNullAllWrong;
-	
-	private boolean isInForeground;
 	private final ConnectivityManager connectivityManager;
 	
-	public GetFreshLocationTask(Activity context, LocationManager locationManager, ConnectivityManager connectivityManager, LocationProvider locationProvider, String locationNullAllWrong, String locationNullEnableGPS) {
+	private boolean isInForeground;
+	private OnNewLocationCallback onNewLocationCallback;
+	
+	public GetFreshLocationTask(Activity context, 
+			LocationManager locationManager, ConnectivityManager connectivityManager, LocationProvider locationProvider, 
+			String locationNullAllWrong, String locationNullEnableGPS) {
 		super(context);
 		this.locationManager = locationManager;
 		this.connectivityManager = connectivityManager;
@@ -41,6 +43,16 @@ public class GetFreshLocationTask extends EnhancedSafeAsyncTaskContexted<Boolean
 		this.locationNullEnableGPS = locationNullEnableGPS;
 	}
 	
+	public GetFreshLocationTask(Activity context, LocationManager locationManager, ConnectivityManager connectivityManager, LocationProvider locationProvider, String locationNullAllWrong, String locationNullEnableGPS, OnNewLocationCallback onNewLocationCallback) {
+		this(context, locationManager, connectivityManager, locationProvider, locationNullAllWrong, locationNullEnableGPS);
+		this.onNewLocationCallback = onNewLocationCallback;
+	}
+	
+	
+	public void execute(OnNewLocationCallback onNewLocationCallback) {
+		this.onNewLocationCallback = onNewLocationCallback;
+		super.execute();
+	}
 	
 	@Override
 	public Boolean call() throws NoNetworkException, LocationException {
@@ -59,7 +71,7 @@ public class GetFreshLocationTask extends EnhancedSafeAsyncTaskContexted<Boolean
 			// ok, there is connectivity, go on			
 			if (isGPSEnabled()) {
 				// network = 1, gps =1, but all is wrong
-				throw new LocationException("");
+				throw new LocationException(locationNullAllWrong);
 			}
 			// network = 1, gps = 0
 			return true;
@@ -69,14 +81,20 @@ public class GetFreshLocationTask extends EnhancedSafeAsyncTaskContexted<Boolean
 	}
 	protected void onSuccess(Boolean locationIsNull) throws Exception {
 		if (locationIsNull) {
-			// TODO simply invite to enable gps
-			Toast.makeText(context, "You could enable GPS", Toast.LENGTH_LONG).show();
-		} 
-		else {
-			// not null, so re-send: receiver in main activity will grab
-			context.sendBroadcast( new Intent().setAction(
-					LocatorUtils.getActionLocationUpdatedString(context)
-					) );
+			// try again
+			Location location = getLocation();
+			if (location==null) {
+				// simply invite to enable gps
+				Toast.makeText(context, locationNullEnableGPS, Toast.LENGTH_LONG).show();
+			} else {
+				if (onNewLocationCallback!=null) {
+					onNewLocationCallback.onNewLocation(location);
+				}
+				// not null, so re-send: receiver in main activity will grab
+				context.sendBroadcast( new Intent().setAction(
+						LocatorUtils.getActionLocationUpdatedString(context)
+						) );
+			}
 		}
 		
 	}
@@ -98,7 +116,10 @@ public class GetFreshLocationTask extends EnhancedSafeAsyncTaskContexted<Boolean
 	};
 	
 	private boolean isNullLocation() {
-		return (locationProvider.getLocation()==null);
+		return (getLocation()==null);
+	}
+	private Location getLocation() {
+		return locationProvider.getLocation();
 	}
 
 	private boolean isGPSEnabled() {
@@ -110,4 +131,8 @@ public class GetFreshLocationTask extends EnhancedSafeAsyncTaskContexted<Boolean
 	public void setApplicationInForeground(boolean isInForeground) {
 		this.isInForeground = isInForeground;
 	}
+	
+	public static interface OnNewLocationCallback {
+		void onNewLocation(Location location);
+	} 
 }

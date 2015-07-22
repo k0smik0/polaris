@@ -17,7 +17,7 @@
  * along with 'Polaris'; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  ******************************************************************************/
-package net.iubris.polaris.locator.provider;
+package net.iubris.polaris.locator.core.provider;
 
 import android.location.Location;
 

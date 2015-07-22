@@ -17,7 +17,7 @@
  * along with 'Polaris'; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
  ******************************************************************************/
-package net.iubris.polaris._di._roboguice.module;
+package net.iubris.polaris._di._roboguice.module.task;
 
 import net.iubris.polaris._di.tasks.resume.freshlocation.annotations.LocationNullAllWrongString;
 import net.iubris.polaris._di.tasks.resume.freshlocation.annotations.LocationNullEnableGPSString;

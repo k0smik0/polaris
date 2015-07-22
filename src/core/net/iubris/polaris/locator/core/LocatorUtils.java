@@ -1,4 +1,4 @@
-package net.iubris.polaris.locator;
+package net.iubris.polaris.locator.core;
 
 import android.content.Context;
 
