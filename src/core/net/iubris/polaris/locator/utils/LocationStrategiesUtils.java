@@ -24,6 +24,7 @@ import net.iubris.polaris.locator.utils.exceptions.LocationNotSoFarException;
 import net.iubris.polaris.locator.utils.exceptions.LocationNotSoNewerException;
 import android.annotation.SuppressLint;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Build;
 import android.util.Log;
 
@@ -260,4 +261,15 @@ Log.d("LocationUtils.isLocationOlder","difference: "+ (System.currentTimeMillis(
 //		else
 //			return false;
 //	}
+	
+	public static boolean isHighAccuracy(LocationManager locationManager, String provider, float accuracy, int accuracyMaxError) {
+		final String gpsProvider = LocationManager.GPS_PROVIDER;
+		final boolean isLowAccuracy = accuracy > accuracyMaxError;
+		final boolean isProviderGPS = provider.equals(gpsProvider);
+		final boolean isGPSEnabled = locationManager.isProviderEnabled(gpsProvider);
+		if ( isLowAccuracy && !isProviderGPS && !isGPSEnabled)
+			return true;
+		else
+			return false;
+	}
 }
