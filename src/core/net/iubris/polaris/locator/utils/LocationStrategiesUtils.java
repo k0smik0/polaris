@@ -60,9 +60,9 @@ public class LocationStrategiesUtils {
 	 */
 	public static boolean isLocationFar(Location newLocation, Location currentLocation, float distanceMaximumThreshold) throws LocationNotSoFarException {
 		float deltaDistance = newLocation.distanceTo(currentLocation);
-Log.d("LocationUtils:62,","newLocation: "+newLocation);
-Log.d("LocationUtils:63,","currentLocation: "+currentLocation);
-Log.d("LocationUtils:64","deltaDistance = "+deltaDistance);		
+Log.d("LocationStrategiesUtils:62,","newLocation: "+newLocation);
+Log.d("LocationStrategiesUtils:63,","currentLocation: "+currentLocation);
+Log.d("LocationStrategiesUtils:64" ,"deltaDistance = "+deltaDistance);		
 		float sensibleThreshold = distanceMaximumThreshold/3;
 		if (deltaDistance > distanceMaximumThreshold) return true; // distance >  threshold
 		if (deltaDistance < sensibleThreshold) return false; // 0 < distance < threshold/3

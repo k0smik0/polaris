@@ -20,8 +20,12 @@
 package net.iubris.polaris._di._roboguice.module.task;
 
 import net.iubris.polaris._di.tasks.resume.freshlocation.annotations.LocationNullAllWrongString;
-import net.iubris.polaris._di.tasks.resume.freshlocation.annotations.LocationNullEnableGPSString;
+import net.iubris.polaris._di.tasks.resume.freshlocation.annotations.ProviderSettingsMessage;
+import net.iubris.polaris._di.tasks.resume.freshlocation.annotations.ProviderSettingsNo;
+import net.iubris.polaris._di.tasks.resume.freshlocation.annotations.ProviderSettingsYes;
 import net.iubris.polaris._di.tasks.resume.freshlocation.providers.GetFreshLocationTaskProvider;
+import net.iubris.polaris._di.tasks.resume.freshlocation.providers.LocationProviderEnablerProvider;
+import net.iubris.polaris.locator.utils.LocationProviderEnabler;
 import net.iubris.polaris.tasks.resume.freshlocation.GetFreshLocationTask;
 
 import com.google.inject.AbstractModule;
@@ -31,8 +35,13 @@ public abstract class PolarisTaskModule extends AbstractModule {
 	@Override
 	protected final void configure() {
 		bindLocationNullAllWrongString(); // provides an english message
-		bindLocationNullEnableGPSString(); // provides an english message
+//		bindLocationNullEnableGPSString(); // provides an english message
 		bind(GetFreshLocationTask.class).toProvider(GetFreshLocationTaskProvider.class);
+		bind(LocationProviderEnabler.class).toProvider(LocationProviderEnablerProvider.class);
+		
+		bindProviderSettingsMessage();
+		bindProviderSettingsYes();
+		bindProviderSettingsNo();
 	}
 	
 	/**
@@ -40,13 +49,24 @@ public abstract class PolarisTaskModule extends AbstractModule {
 	 * default: in english
 	 */
 	protected void bindLocationNullAllWrongString() {
-		bind(String.class).annotatedWith(LocationNullAllWrongString.class).toInstance("location is null, something was wrong.");
+		bind(String.class).annotatedWith(LocationNullAllWrongString.class).toInstance("location is null,\nsomething was wrong,\ncheck your settings.");
 	}
+	protected void bindProviderSettingsMessage() {
+		bind(String.class).annotatedWith(ProviderSettingsMessage.class).toInstance("Your GPS seems to be disabled, do you want to enable it?");
+	}
+	protected void bindProviderSettingsYes() {
+		bind(String.class).annotatedWith(ProviderSettingsYes.class).toInstance("Yes");
+	}
+	protected void bindProviderSettingsNo() {
+		bind(String.class).annotatedWith(ProviderSettingsNo.class).toInstance("No");
+	}
+	
+	
 	/**
 	 * binding needed for {@link GetFreshLocationTask}<br/>
 	 * default: do nothing 
 	 */
-	protected void bindLocationNullEnableGPSString() {
+	/*protected void bindLocationNullEnableGPSString() {
 		bind(String.class).annotatedWith(LocationNullEnableGPSString.class).toInstance("location is null, you could enable your GPS.");
-	}
+	}*/
 }
