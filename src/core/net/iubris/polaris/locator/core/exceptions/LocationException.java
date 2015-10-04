@@ -22,6 +22,10 @@ package net.iubris.polaris.locator.core.exceptions;
 public class LocationException extends Exception {
 
 	private static final long serialVersionUID = -3643620849629479936L;
+	
+	public LocationException() {
+		super();
+	}
 
 	public LocationException(String detailMessage, Throwable throwable) {
 		super(detailMessage, throwable);

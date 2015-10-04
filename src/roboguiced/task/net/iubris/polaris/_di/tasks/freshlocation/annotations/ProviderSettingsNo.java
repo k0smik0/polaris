@@ -1,4 +1,4 @@
-package net.iubris.polaris._di.tasks.resume.freshlocation.annotations;
+package net.iubris.polaris._di.tasks.freshlocation.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -14,4 +14,4 @@ import javax.inject.Qualifier;
 		ElementType.METHOD, 
 		ElementType.PARAMETER})
 @Retention(value=RetentionPolicy.RUNTIME)
-public @interface ProviderSettingsMessage {}
+public @interface ProviderSettingsNo {}

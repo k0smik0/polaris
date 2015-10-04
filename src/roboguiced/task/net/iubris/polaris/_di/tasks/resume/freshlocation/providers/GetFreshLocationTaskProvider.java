@@ -3,10 +3,10 @@ package net.iubris.polaris._di.tasks.resume.freshlocation.providers;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-import net.iubris.polaris._di.tasks.resume.freshlocation.annotations.LocationNullAllWrongString;
+import net.iubris.polaris._di.tasks.freshlocation.annotations.LocationNullAllWrongString;
 import net.iubris.polaris.locator.core.provider.LocationProvider;
 import net.iubris.polaris.locator.utils.LocationProviderEnabler;
-import net.iubris.polaris.tasks.resume.freshlocation.GetFreshLocationTask;
+import net.iubris.polaris.tasks.freshlocation.GetFreshLocationTask;
 import roboguice.inject.ContextSingleton;
 import android.app.Activity;
 

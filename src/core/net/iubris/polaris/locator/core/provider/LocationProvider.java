@@ -19,13 +19,14 @@
  ******************************************************************************/
 package net.iubris.polaris.locator.core.provider;
 
+import net.iubris.polaris.locator.core.exceptions.LocationNullException;
 import android.location.Location;
 
 public interface LocationProvider {
 	/**
 	 * @return provided location
 	 */
-	Location getLocation();
+	Location getLocation() throws LocationNullException;
 	/**
 	 * @return time threshold used to check new locations - in milliseconds
 	 */

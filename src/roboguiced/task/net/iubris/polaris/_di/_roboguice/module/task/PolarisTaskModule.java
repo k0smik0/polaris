@@ -19,14 +19,14 @@
  ******************************************************************************/
 package net.iubris.polaris._di._roboguice.module.task;
 
-import net.iubris.polaris._di.tasks.resume.freshlocation.annotations.LocationNullAllWrongString;
-import net.iubris.polaris._di.tasks.resume.freshlocation.annotations.ProviderSettingsMessage;
-import net.iubris.polaris._di.tasks.resume.freshlocation.annotations.ProviderSettingsNo;
-import net.iubris.polaris._di.tasks.resume.freshlocation.annotations.ProviderSettingsYes;
+import net.iubris.polaris._di.tasks.freshlocation.annotations.LocationNullAllWrongString;
+import net.iubris.polaris._di.tasks.freshlocation.annotations.ProviderSettingsMessage;
+import net.iubris.polaris._di.tasks.freshlocation.annotations.ProviderSettingsNo;
+import net.iubris.polaris._di.tasks.freshlocation.annotations.ProviderSettingsYes;
 import net.iubris.polaris._di.tasks.resume.freshlocation.providers.GetFreshLocationTaskProvider;
 import net.iubris.polaris._di.tasks.resume.freshlocation.providers.LocationProviderEnablerProvider;
 import net.iubris.polaris.locator.utils.LocationProviderEnabler;
-import net.iubris.polaris.tasks.resume.freshlocation.GetFreshLocationTask;
+import net.iubris.polaris.tasks.freshlocation.GetFreshLocationTask;
 
 import com.google.inject.AbstractModule;
 
