@@ -17,12 +17,11 @@ public class DefaultOnLocationUpdatedCallback implements OnLocationUpdatedCallba
 	@Override
 	public final void onLocationUpdated(Location newLocation) {
 		// first time
+		wasNull = false;
 		if (location==null) {
 			location = newLocation;
 			wasNull  = true;
-		} else
-			wasNull = false;
-		
+		}			
 		
 		if (LocationStrategiesUtils.isLocationBetter(newLocation, location, TIME_MAXIMUM_THRESHOLD_IN_SECONDS, ACCURACY_DISTANCE_MAXIMUM_THRESHOLD_IN_METERS)) {
 			if (wasNull) {

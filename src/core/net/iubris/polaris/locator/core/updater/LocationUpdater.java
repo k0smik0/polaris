@@ -22,5 +22,6 @@ package net.iubris.polaris.locator.core.updater;
 public interface LocationUpdater {
 	void startLocationUpdates();
 	void startLocationUpdates(OnLocationUpdatedCallback callback);
+	void startLocationUpdates(OnLocationUpdatedCallback callback, OnNoNewLocationTimeoutCallback onNoNewLocationTimeoutCallback);
 	void stopLocationUpdates();
 }

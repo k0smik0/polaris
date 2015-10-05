@@ -123,14 +123,11 @@ public class GetFreshLocationTask extends EnhancedSafeAsyncTaskContexted<Boolean
 	}
 
 	protected void onSuccess(Boolean locationIsNull) throws Exception {
-		Log.d("GetFreshLocationTask","new Location inside onSuccess: "+location);
-//		Log.d("GTLT:124", ""+location);
-//		}
+		Log.d("GetFreshLocationTask","new Location inside onSuccess?: "+location);
 		if (isNullLocation(location)) {
 			// simply report apocalypse now
 			Toast.makeText(context, locationNullAllWrong, Toast.LENGTH_LONG).show();
 		} else {
-//			Log.d("GetFreshLocationTask:90",""+location);
 			if (onLocationUpdatedCallback!=null) {
 				onLocationUpdatedCallback.onLocationUpdated(location);
 			}
