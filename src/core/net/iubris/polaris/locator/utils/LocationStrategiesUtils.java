@@ -28,7 +28,6 @@ import android.annotation.SuppressLint;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
-import android.util.Log;
 
 /**
  * using tips from: <a href="http://developer.android.com/guide/topics/location/strategies.html">
@@ -36,6 +35,8 @@ import android.util.Log;
  */
 
 public class LocationStrategiesUtils {
+	
+//	private static final String TAG = LocationStrategiesUtils.class.getPackage()+"."+LocationStrategiesUtils.class.getSimpleName();
 	
 	@SuppressLint("NewApi")
 	public static boolean isLocationOld(Location location, int seconds) {
@@ -147,15 +148,15 @@ Log.d("LocationUtils.isLocationOlder","difference: "+ (System.currentTimeMillis(
 	 * @throws LocationNotSoCarefulException if newLocation is retrieved in same admitted area, 
 	 * according to accuracyDistanceMaximumThreshold parameter
 	 */
-	public static boolean isLocationCareful(Location newLocation, Location currentLocation, 
-			float accuracyDistanceMaximumThreshold) throws LocationNotSoCarefulException{
+	public static boolean isLocationCareful(Location newLocation, Location currentLocation, float accuracyDistanceMaximumThreshold) throws LocationNotSoCarefulException{
+//		final String methodName = "isLocationCareful";
 		
 //		old way
 //		if (actualLocation.distanceTo(oldLocation) > distanceMinimumThreshold) return true;
 		
 		// lower value from getAccuraty => better accuracy  
 		final float accuracyDelta = newLocation.getAccuracy() - currentLocation.getAccuracy();
-		Log.d("LocationStrategiesUtils","accuracyDelta: "+accuracyDelta);
+//		Log.d(TAG+":"+methodName,"accuracyDelta: "+accuracyDelta);
 		if (accuracyDelta < 0.0) 	// ok, delta < 0, so is careful: isMoreAccurate
 			return true;
 		if (accuracyDelta > accuracyDistanceMaximumThreshold) { 
